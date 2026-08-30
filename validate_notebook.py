@@ -30,6 +30,9 @@ def main() -> None:
         "sha256_texto_lf",
         "StratifiedGroupKFold",
         "RandomForestClassifier",
+        "'scipy': '1.18.1'",
+        "prueba_stack",
+        "MARCADOR_REINICIO",
         "EJECUTAR_COMPARACION_COMPLETA",
         "comparacion_consolidada.csv",
         "random_forest_a_colab.joblib",
@@ -42,4 +45,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
