@@ -1,0 +1,13 @@
+{
+  "proyecto_fuente": "phenological_prediction",
+  "version": "0.1.0-rc.2",
+  "commit": "96b4e94687e8ff0aa7f904509ec0c2cdb4f0751d",
+  "repositorio": "https://github.com/Lezier/phenological_prediction",
+  "hashes_datos_sha256_lf": {
+    "base_fenologia_clima.csv": "0397C7A0B61B76388C22A1CDD1F13BCB2B7E10069C7BBB2935F0ADCC2E5CF6B7",
+    "base_fenologia_clima_satelite.csv": "0C307E8CAAEEE04A87EB572AA675C4BB7C97EF1C1BC5C0D36C7018FB7129ADCA"
+  },
+  "alcance": "Reproducción desde CSV consolidados hasta comparación, entrenamiento final e inferencia.",
+  "estado_fuente": "Evidencia técnica verificada y congelada"
+}
+
