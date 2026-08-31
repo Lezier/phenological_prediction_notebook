@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-notebook.7 - 2026-08-31
+
+- Genera `manifest_ejecucion.json` con ruta, tamaño y SHA-256 de cada archivo.
+- Verifica nuevamente todos los artefactos antes de comprimirlos.
+- Empaqueta datos, resultados y modelo en un ZIP por ejecución.
+- Muestra hash y tamaño del ZIP e inicia su descarga mediante
+  `google.colab.files.download()` sin depender de Google Drive.
+
 ## 0.1.0-notebook.6 - 2026-08-31
 
 - Migra la fuente técnica a Python RC3, commit

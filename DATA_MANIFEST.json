@@ -1,7 +1,8 @@
 {
-  "version": "0.1.0-notebook.6",
+  "version": "0.1.0-notebook.7",
   "fuente_rc": "0.1.0-rc.3",
   "commit_fuente": "253358e75ac6bf72333d358251613473f59961ee",
+  "commit_publicacion_datos": "627089922f5e162e1008e2601259ee24226d09c1",
   "algoritmo": "SHA-256",
   "modo_hash": "sha256-lf",
   "archivos": [

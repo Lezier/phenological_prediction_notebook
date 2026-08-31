@@ -30,7 +30,8 @@ No reproduce la adquisición original desde PEP725, NASA POWER o Sentinel-2.
 
 No se requiere Google Drive, token, credencial ni servicio de pago. Los
 resultados se escriben temporalmente en `/content/phenological_prediction_run_*`.
-CP15 incorporará su empaquetado y descarga directa como ZIP.
+Los datos se descargan desde el commit público inmutable
+`627089922f5e162e1008e2601259ee24226d09c1` y luego se verifican por hash.
 
 La comparación completa incluye TensorFlow y puede tardar. Cambiar
 `EJECUTAR_COMPARACION_COMPLETA` a `False` permite probar el resto del flujo,
@@ -47,7 +48,7 @@ de compilación y no cambia el protocolo ni las métricas calculadas.
 - Fuente Python: `SOURCE_RC.json`.
 - Identidad de los CSV: `DATA_MANIFEST.json`.
 - Datos públicos: `data/`.
-- Versión del notebook: `0.1.0-notebook.6`.
+- Versión del notebook: `0.1.0-notebook.7`.
 - Configuración: 5 folds, semilla 42, Random Forest de 400 árboles y baseline
   neuronal heredado.
 - Evidencia principal: validación `StratifiedGroupKFold` por `s_id`.
@@ -63,6 +64,19 @@ python validate_notebook.py
 La validación comprueba JSON, sintaxis de celdas, versión, commit fuente,
 hashes de datos, ausencia de salidas históricas, rutas personales, Drive y
 patrones básicos de secretos.
+
+## Descarga de resultados
+
+La última celda valida los archivos producidos, genera
+`manifest_ejecucion.json` y comprime la carpeta completa como
+`phenological_prediction_run_<identificador>.zip`. Antes de descargar muestra
+el SHA-256 y tamaño del ZIP. Luego `google.colab.files.download()` inicia la
+descarga al equipo local; no requiere Drive ni una función de pago.
+
+El ZIP contiene los CSV de entrada verificados, los resultados CSV/JSON/PNG,
+el modelo `.joblib` y el manifiesto. Este último registra ruta, tamaño y
+SHA-256 de cada archivo anterior a su propia creación, evitando una
+autorreferencia imposible.
 
 ## Licencias y procedencia
 

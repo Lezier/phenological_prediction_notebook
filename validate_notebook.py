@@ -12,6 +12,7 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parent
 RUTA_NOTEBOOK = RAIZ / "phenological_prediction_colab.ipynb"
 COMMIT_RC3 = "253358e75ac6bf72333d358251613473f59961ee"
+COMMIT_DATOS = "627089922f5e162e1008e2601259ee24226d09c1"
 
 
 def sha256_texto_lf(ruta: Path) -> str:
@@ -26,10 +27,11 @@ def main() -> None:
 
     assert notebook["nbformat"] == 4
     assert len(notebook["cells"]) == 16
-    assert version == "0.1.0-notebook.6"
+    assert version == "0.1.0-notebook.7"
     assert fuente_rc["version"] == "0.1.0-rc.3"
     assert fuente_rc["commit"] == COMMIT_RC3
     assert datos["commit_fuente"] == COMMIT_RC3
+    assert datos["commit_publicacion_datos"] == COMMIT_DATOS
 
     codigo, todo = [], []
     for indice, celda in enumerate(notebook["cells"], start=1):
@@ -49,7 +51,9 @@ def main() -> None:
         "asignacion_folds.csv", "pesos_clase_por_fold.csv",
         "tiempos_por_fold.csv", "perf_counter", "RandomForestClassifier",
         "comparacion_consolidada.csv", "random_forest_a_colab.joblib",
-        "probabilidades_calibradas", COMMIT_RC3,
+        "probabilidades_calibradas", "shutil.make_archive", "files.download",
+        "manifest_ejecucion.json", "sha256_raw", ".zip", COMMIT_RC3,
+        COMMIT_DATOS,
     ]
     faltantes = [texto for texto in requeridos if texto not in contenido_codigo]
     assert not faltantes, f"Faltan componentes RC3: {faltantes}"
@@ -66,7 +70,7 @@ def main() -> None:
         assert sha256_texto_lf(ruta) == item["sha256"]
 
     print(
-        f"Notebook CP14 válido: {len(notebook['cells'])} celdas, "
+        f"Notebook CP15 válido: {len(notebook['cells'])} celdas, "
         f"{len(codigo)} de código, 2 CSV verificados."
     )
 
