@@ -1,86 +1,74 @@
-# Notebook reproducible para Google Colab
+# Predicción fenológica reproducible en Google Colab
 
-Proyecto complementario del release candidate privado
-`phenological_prediction` `0.1.0-rc.2`, commit
-`96b4e94687e8ff0aa7f904509ec0c2cdb4f0751d`.
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Lezier/phenological_prediction_notebook/blob/main/phenological_prediction_colab.ipynb)
 
-## Runtime requerido
+Port público del proyecto Python `phenological_prediction` **0.1.0-rc.3**,
+commit `253358e75ac6bf72333d358251613473f59961ee`.
 
-El notebook exige **CPython 3.13** antes de instalar dependencias. La primera
-celda se detiene con un mensaje explícito si Colab entrega otro intérprete.
-Las versiones fijadas disponen de wheels compatibles con CPython 3.13; la
-instalación usa `--only-binary=:all:` para evitar compilaciones locales y luego
-comprueba que cada distribución quedó en la versión esperada. SciPy se fija de
-forma explícita porque scikit-learn depende de ella; no se deja a la resolución
-transitiva de `pip`.
+## Alcance
 
-La celda exige un único reinicio limpio por runtime, haya sido necesario
-instalar paquetes o no. Registra un marcador temporal en `/content`, reinicia
-deliberadamente el kernel y, tras la reconexión, comprueba versiones y binarios
-antes de continuar. Esto evita mezclar en memoria módulos preinstalados por
-Colab con archivos reemplazados. El marcador evita un ciclo de reinicios.
+El notebook ejecuta un único flujo reproducible:
 
-El notebook reproduce, desde los dos CSV consolidados, la preparación de A,
-A' y B, la comparación entre red densa y Random Forest, el entrenamiento de
-Random Forest A y una inferencia demostrativa. No reproduce la adquisición
-original desde PEP725, NASA POWER o Sentinel-2.
+1. verifica Python 3.13 y las dependencias fijadas;
+2. descarga desde este repositorio los dos CSV y valida sus SHA-256;
+3. prepara A, A′ y B;
+4. compara red densa y Random Forest con los mismos folds y pesos;
+5. exporta métricas por fold, dispersión, tiempos, asignaciones, pesos y matrices;
+6. entrena Random Forest A con 1.091 filas;
+7. demuestra inferencia mediante siete variables climáticas;
+8. genera un manifiesto de la ejecución.
 
-## Privacidad y almacenamiento
+No reproduce la adquisición original desde PEP725, NASA POWER o Sentinel-2.
 
-Los datos no se incluyen en este proyecto. Antes de ejecutar, crear en Google
-Drive la estructura:
+## Ejecución
 
-```text
-MyDrive/
-`-- phenological_prediction_private/
-    |-- data/
-    |   |-- base_fenologia_clima.csv
-    |   `-- base_fenologia_clima_satelite.csv
-    `-- ejecuciones/
+1. Abra el notebook con el botón **Open in Colab**.
+2. Seleccione un runtime CPU con **Python 3.13**.
+3. Ejecute todas las celdas.
+4. Si la primera celda reinicia el kernel, reconecte y use **Ejecutar todo** otra vez.
+5. Compruebe que la última celda muestre `CONTROLES APROBADOS`.
+
+No se requiere Google Drive, token, credencial ni servicio de pago. Los
+resultados se escriben temporalmente en `/content/phenological_prediction_run_*`.
+CP15 incorporará su empaquetado y descarga directa como ZIP.
+
+La comparación completa incluye TensorFlow y puede tardar. Cambiar
+`EJECUTAR_COMPARACION_COMPLETA` a `False` permite probar el resto del flujo,
+pero ese modo no reproduce las métricas oficiales.
+
+La inferencia de la red se realiza invocando directamente el modelo con
+`training=False`, en vez de crear repetidamente funciones de `predict()` dentro
+del bucle. Esto reduce las advertencias de *retracing* observadas en la versión
+anterior; si TensorFlow emite alguna advertencia residual, corresponde a coste
+de compilación y no cambia el protocolo ni las métricas calculadas.
+
+## Contrato RC3
+
+- Fuente Python: `SOURCE_RC.json`.
+- Identidad de los CSV: `DATA_MANIFEST.json`.
+- Datos públicos: `data/`.
+- Versión del notebook: `0.1.0-notebook.6`.
+- Configuración: 5 folds, semilla 42, Random Forest de 400 árboles y baseline
+  neuronal heredado.
+- Evidencia principal: validación `StratifiedGroupKFold` por `s_id`.
+- Modelo del prototipo: Random Forest A.
+- Probabilidades: puntajes no calibrados.
+
+## Validación sin entrenamiento
+
+```powershell
+python validate_notebook.py
 ```
 
-El notebook monta Drive, comprueba los hashes SHA-256 canónicos de ambos CSV,
-copia los datos al almacenamiento temporal de Colab y crea una carpeta nueva
-por ejecución. No sobrescribe corridas anteriores.
+La validación comprueba JSON, sintaxis de celdas, versión, commit fuente,
+hashes de datos, ausencia de salidas históricas, rutas personales, Drive y
+patrones básicos de secretos.
 
-## Uso en Colab
+## Licencias y procedencia
 
-1. Subir `phenological_prediction_colab.ipynb` a Google Drive.
-2. Abrirlo con Google Colab usando la cuenta autorizada para los datos.
-3. Revisar la celda **Configuración privada de Drive**. Solo modificar
-   `DRIVE_PROJECT_ROOT` si se eligió otra ubicación.
-4. Seleccionar **Entorno de ejecución > Ejecutar todo**.
-5. Si la primera ejecución instala paquetes, esperar el reinicio automático,
-   reconectar y seleccionar **Ejecutar todo** nuevamente.
-6. Confirmar que la celda informa `Python 3.13` y seis versiones aprobadas.
-7. Autorizar el montaje de Drive cuando Google lo solicite.
-8. Conservar la carpeta de ejecución indicada por la última celda.
+- `DATA_LICENSE.md`: CC BY-NC 4.0, atribuciones y restricciones.
+- `DATA_PROVENANCE.md`: linaje y límite de reproducción.
+- `CODE_LICENSE.md`: situación del código; no existe licencia abierta concedida.
 
-### Error `_slice` de NumPy
-
-Si se usó una versión anterior del notebook y aparece
-`cannot import name '_slice' from numpy._core.umath`, reiniciar la sesión de
-Colab, reemplazar el notebook por `0.1.0-notebook.5` y ejecutar todo. No se
-soluciona reinstalando repetidamente dentro del mismo kernel dañado.
-
-Antes de importar bibliotecas en el kernel principal, la celda ejecuta una
-prueba de salud en un proceso Python separado que importa NumPy, SciPy,
-scikit-learn, pandas, Matplotlib, joblib y TensorFlow. Si esa prueba falla,
-reinstala el conjunto completo y reinicia el kernel.
-
-La comparación completa incluye TensorFlow y puede tardar. Para ensayar solo
-la inferencia se puede cambiar `EJECUTAR_COMPARACION_COMPLETA` a `False`, pero
-ese modo no constituye una reproducción de las métricas.
-
-## Fuente técnica
-
-`SOURCE_RC.json` identifica la versión, commit y hashes de los datos del RC.
-El notebook no modifica ni sustituye la evidencia congelada. Una ejecución en
-Colab es evidencia complementaria y debe registrar sus propias versiones,
-fecha, parámetros, métricas y hashes.
-
-## Archivos excluidos
-
-`.gitignore` impide incorporar por accidente datos, modelos, resultados,
-entornos virtuales y secretos. No escribir contraseñas ni tokens en el
-notebook.
+Uso experimental con datos europeos; no validado para operación en Chile y no
+sustituye evaluación agronómica.

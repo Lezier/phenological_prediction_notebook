@@ -1,0 +1,20 @@
+{
+  "version": "0.1.0-notebook.6",
+  "fuente_rc": "0.1.0-rc.3",
+  "commit_fuente": "253358e75ac6bf72333d358251613473f59961ee",
+  "algoritmo": "SHA-256",
+  "modo_hash": "sha256-lf",
+  "archivos": [
+    {
+      "ruta": "data/base_fenologia_clima.csv",
+      "filas": 1130,
+      "sha256": "0397C7A0B61B76388C22A1CDD1F13BCB2B7E10069C7BBB2935F0ADCC2E5CF6B7"
+    },
+    {
+      "ruta": "data/base_fenologia_clima_satelite.csv",
+      "filas": 1130,
+      "sha256": "0C307E8CAAEEE04A87EB572AA675C4BB7C97EF1C1BC5C0D36C7018FB7129ADCA"
+    }
+  ],
+  "nota": "Los finales CRLF se normalizan a LF antes de calcular el hash. El notebook rechaza cualquier contenido diferente."
+}

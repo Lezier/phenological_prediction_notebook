@@ -2,9 +2,7 @@
 __pycache__/
 *.py[cod]
 .venv/
-data/
 output/
 models/
 secrets/
 *.env
-
